@@ -1,0 +1,146 @@
+[2025-01-02 21:43:39] Traceback (most recent call last):
+[2025-01-02 21:44:34] Traceback (most recent call last):
+[2025-01-02 21:44:49] Traceback (most recent call last):
+[2025-01-02 21:45:54] Traceback (most recent call last):
+[2025-01-02 21:49:05] INFO 01-02 21:48:59 api_server.py:651] vLLM API server version 0.6.5
+[2025-01-02 21:49:05] You are using the default legacy behaviour of the <class 'transformers.models.llama.tokenization_llama_fast.LlamaTokenizerFast'>. This is expected, and simply means that the `legacy` (previous) behavior will be used so nothing changes for you. If you want to use the new behaviour, set `legacy=False`. This should only be set if you understand what it means, and thoroughly read the reason why this was added as explained in https://github.com/huggingface/transformers/pull/24565 - if you loaded a llama tokenizer from a GGUF file you can ignore this message.
+[2025-01-02 21:49:06] INFO 01-02 21:48:59 api_server.py:652] args: Namespace(subparser='serve', model_tag='/home/lukas/projects/LLM_testing/webui/text-generation-webui-main/models/Mistral-Small-Instruct-2409-Q6_K_L.gguf', config='', host=None, port=8000, uvicorn_log_level='info', allow_credentials=False, allowed_origins=['*'], allowed_methods=['*'], allowed_headers=['*'], api_key=None, lora_modules=None, prompt_adapters=None, chat_template='/home/lukas/projects/LLM_Canvas/chat_templates/mistral_chat.jinja', chat_template_content_format='auto', response_role='assistant', ssl_keyfile=None, ssl_certfile=None, ssl_ca_certs=None, ssl_cert_reqs=0, root_path=None, middleware=[], return_tokens_as_token_ids=False, disable_frontend_multiprocessing=False, enable_auto_tool_choice=False, tool_call_parser=None, tool_parser_plugin='', model='/home/lukas/projects/LLM_testing/webui/text-generation-webui-main/models/Mistral-Small-Instruct-2409-Q6_K_L.gguf', task='auto', tokenizer=None, skip_tokenizer_init=False, revision=None, code_revision=None, tokenizer_revision=None, tokenizer_mode='auto', trust_remote_code=False, allowed_local_media_path=None, download_dir=None, load_format='auto', config_format=<ConfigFormat.AUTO: 'auto'>, dtype='auto', kv_cache_dtype='auto', quantization_param_path=None, max_model_len=17000, guided_decoding_backend='xgrammar', logits_processor_pattern=None, distributed_executor_backend=None, worker_use_ray=False, pipeline_parallel_size=1, tensor_parallel_size=2, max_parallel_loading_workers=None, ray_workers_use_nsight=False, block_size=None, enable_prefix_caching=None, disable_sliding_window=False, use_v2_block_manager=True, num_lookahead_slots=0, seed=0, swap_space=4, cpu_offload_gb=0, gpu_memory_utilization=0.9, num_gpu_blocks_override=None, max_num_batched_tokens=None, max_num_seqs=None, max_logprobs=20, disable_log_stats=False, quantization=None, rope_scaling=None, rope_theta=None, hf_overrides=None, enforce_eager=False, max_seq_len_to_capture=8192, disable_custom_all_reduce=False, tokenizer_pool_size=0, tokenizer_pool_type='ray', tokenizer_pool_extra_config=None, limit_mm_per_prompt=None, mm_processor_kwargs=None, mm_cache_preprocessor=False, enable_lora=False, enable_lora_bias=False, max_loras=1, max_lora_rank=16, lora_extra_vocab_size=256, lora_dtype='auto', long_lora_scaling_factors=None, max_cpu_loras=None, fully_sharded_loras=False, enable_prompt_adapter=False, max_prompt_adapters=1, max_prompt_adapter_token=0, device='auto', num_scheduler_steps=1, multi_step_stream_outputs=True, scheduler_delay_factor=0.0, enable_chunked_prefill=None, speculative_model=None, speculative_model_quantization=None, num_speculative_tokens=None, speculative_disable_mqa_scorer=False, speculative_draft_tensor_parallel_size=None, speculative_max_model_len=None, speculative_disable_by_batch_size=None, ngram_prompt_lookup_max=None, ngram_prompt_lookup_min=None, spec_decoding_acceptance_method='rejection_sampler', typical_acceptance_sampler_posterior_threshold=None, typical_acceptance_sampler_posterior_alpha=None, disable_logprobs_during_spec_decoding=None, model_loader_extra_config=None, ignore_patterns=[], preemption_mode=None, served_model_name=None, qlora_adapter_name_or_path=None, otlp_traces_endpoint=None, collect_detailed_traces=None, disable_async_output_proc=False, scheduling_policy='fcfs', override_neuron_config=None, override_pooler_config=None, compilation_config=None, kv_transfer_config=None, worker_cls='auto', disable_log_requests=False, max_log_len=None, disable_fastapi_docs=False, enable_prompt_tokens_details=False, dispatch_function=<function serve at 0x7ff1a2ac4540>)
+[2025-01-02 21:49:06] Merges were not in checkpoint, building merges on the fly.
+[2025-01-02 21:49:06] INFO 01-02 21:48:59 api_server.py:199] Started engine process with PID 306673
+[2025-01-02 21:49:06] 
+[2025-01-02 21:49:06] INFO 01-02 21:49:01 config.py:2167] Downcasting torch.float32 to torch.float16.
+[2025-01-02 21:49:06]   0%|          | 0/32768 [00:00<?, ?it/s]
+[2025-01-02 21:49:06] INFO 01-02 21:49:03 config.py:2167] Downcasting torch.float32 to torch.float16.
+[2025-01-02 21:49:06]   0%|          | 79/32768 [00:00<00:41, 783.83it/s]
+[2025-01-02 21:49:07] INFO 01-02 21:49:04 config.py:478] This model supports multiple tasks: {'score', 'embed', 'reward', 'generate', 'classify'}. Defaulting to 'generate'.
+[2025-01-02 21:49:07]   0%|          | 158/32768 [00:00<00:44, 739.24it/s]
+[2025-01-02 21:49:07] WARNING 01-02 21:49:04 config.py:556] gguf quantization is not fully optimized yet. The speed can be slower than non-quantized models.
+[2025-01-02 21:49:07]   1%|          | 233/32768 [00:00<00:45, 719.77it/s]
+[2025-01-02 21:49:07] INFO 01-02 21:49:04 config.py:1216] Defaulting to use mp for distributed inference
+[2025-01-02 21:49:07]   1%|          | 306/32768 [00:00<00:45, 710.91it/s]
+[2025-01-02 21:49:07] INFO 01-02 21:49:06 config.py:478] This model supports multiple tasks: {'generate', 'classify', 'score', 'embed', 'reward'}. Defaulting to 'generate'.
+[2025-01-02 21:49:07]   1%|          | 378/32768 [00:00<00:45, 705.87it/s]
+[2025-01-02 21:49:07] WARNING 01-02 21:49:06 config.py:556] gguf quantization is not fully optimized yet. The speed can be slower than non-quantized models.
+[2025-01-02 21:49:07]   1%|▏         | 449/32768 [00:00<00:45, 702.93it/s]
+[2025-01-02 21:49:07] INFO 01-02 21:49:06 config.py:1216] Defaulting to use mp for distributed inference
+[2025-01-02 21:49:07]   2%|▏         | 520/32768 [00:00<00:45, 701.16it/s]
+[2025-01-02 21:49:07] INFO 01-02 21:49:06 llm_engine.py:249] Initializing an LLM engine (v0.6.5) with config: model='/home/lukas/projects/LLM_testing/webui/text-generation-webui-main/models/Mistral-Small-Instruct-2409-Q6_K_L.gguf', speculative_config=None, tokenizer='/home/lukas/projects/LLM_testing/webui/text-generation-webui-main/models/Mistral-Small-Instruct-2409-Q6_K_L.gguf', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, override_neuron_config=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.float16, max_seq_len=17000, download_dir=None, load_format=LoadFormat.GGUF, tensor_parallel_size=2, pipeline_parallel_size=1, disable_custom_all_reduce=False, quantization=gguf, enforce_eager=False, kv_cache_dtype=auto, quantization_param_path=None, device_config=cuda, decoding_config=DecodingConfig(guided_decoding_backend='xgrammar'), observability_config=ObservabilityConfig(otlp_traces_endpoint=None, collect_model_forward_time=False, collect_model_execute_time=False), seed=0, served_model_name=/home/lukas/projects/LLM_testing/webui/text-generation-webui-main/models/Mistral-Small-Instruct-2409-Q6_K_L.gguf, num_scheduler_steps=1, multi_step_stream_outputs=True, enable_prefix_caching=False, chunked_prefill_enabled=False, use_async_output_proc=True, mm_cache_preprocessor=False, mm_processor_kwargs=None, pooler_config=None, compilation_config={"splitting_ops":["vllm.unified_attention","vllm.unified_attention_with_output"],"candidate_compile_sizes":[],"compile_sizes":[],"capture_sizes":[256,248,240,232,224,216,208,200,192,184,176,168,160,152,144,136,128,120,112,104,96,88,80,72,64,56,48,40,32,24,16,8,4,2,1],"max_capture_size":256}, use_cached_outputs=True, 
+[2025-01-02 21:49:07]   2%|▏         | 591/32768 [00:00<00:45, 699.93it/s]
+[2025-01-02 21:49:25] WARNING 01-02 21:49:25 multiproc_worker_utils.py:312] Reducing Torch parallelism from 16 threads to 1 to avoid unnecessary CPU contention. Set OMP_NUM_THREADS in the external environment to tune this value as needed.
+[2025-01-02 21:49:25]   2%|▏         | 661/32768 [00:00<00:45, 698.76it/s]You are using the default legacy behaviour of the <class 'transformers.models.llama.tokenization_llama_fast.LlamaTokenizerFast'>. This is expected, and simply means that the `legacy` (previous) behavior will be used so nothing changes for you. If you want to use the new behaviour, set `legacy=False`. This should only be set if you understand what it means, and thoroughly read the reason why this was added as explained in https://github.com/huggingface/transformers/pull/24565 - if you loaded a llama tokenizer from a GGUF file you can ignore this message.
+[2025-01-02 21:49:25] INFO 01-02 21:49:25 custom_cache_manager.py:17] Setting Triton cache manager to: vllm.triton_utils.custom_cache_manager:CustomCacheManager
+[2025-01-02 21:49:25] 
+[2025-01-02 21:49:25] INFO 01-02 21:49:25 selector.py:120] Using Flash Attention backend.
+[2025-01-02 21:49:25]   2%|▏         | 731/32768 [00:01<00:45, 697.55it/s]
+[2025-01-02 21:49:27] [1;36m(VllmWorkerProcess pid=306880)[0;0m INFO 01-02 21:49:27 selector.py:120] Using Flash Attention backend.
+[2025-01-02 21:49:27]   3%|▎         | 820/32768 [00:01<00:42, 754.49it/s]
+[2025-01-02 21:49:27] [1;36m(VllmWorkerProcess pid=306880)[0;0m INFO 01-02 21:49:27 multiproc_worker_utils.py:222] Worker ready; awaiting tasks
+[2025-01-02 21:49:27]   3%|▎         | 967/32768 [00:01<00:32, 969.02it/s]
+[2025-01-02 21:49:28] INFO 01-02 21:49:28 utils.py:922] Found nccl from library libnccl.so.2
+[2025-01-02 21:49:28]   4%|▍         | 1319/32768 [00:01<00:18, 1735.96it/s]
+[2025-01-02 21:49:28] [1;36m(VllmWorkerProcess pid=306880)[0;0m INFO 01-02 21:49:28 utils.py:922] Found nccl from library libnccl.so.2
+[2025-01-02 21:49:28]   5%|▌         | 1736/32768 [00:01<00:12, 2466.56it/s]
+[2025-01-02 21:49:28] INFO 01-02 21:49:28 pynccl.py:69] vLLM is using nccl==2.21.5
+[2025-01-02 21:49:28]   6%|▋         | 2118/32768 [00:01<00:10, 2871.25it/s]
+[2025-01-02 21:49:28] [1;36m(VllmWorkerProcess pid=306880)[0;0m INFO 01-02 21:49:28 pynccl.py:69] vLLM is using nccl==2.21.5
+[2025-01-02 21:49:28]   8%|▊         | 2469/32768 [00:01<00:09, 3062.20it/s]Merges were not in checkpoint, building merges on the fly.
+[2025-01-02 21:49:28] INFO 01-02 21:49:28 custom_all_reduce_utils.py:242] reading GPU P2P access cache from /home/lukas/.cache/vllm/gpu_p2p_access_cache_for_0,1.json
+[2025-01-02 21:49:28] 
+[2025-01-02 21:49:28] [1;36m(VllmWorkerProcess pid=306880)[0;0m INFO 01-02 21:49:28 custom_all_reduce_utils.py:242] reading GPU P2P access cache from /home/lukas/.cache/vllm/gpu_p2p_access_cache_for_0,1.json
+[2025-01-02 21:49:28]   0%|          | 0/32768 [00:00<?, ?it/s]
+[2025-01-02 21:49:28] [1;36m(VllmWorkerProcess pid=306880)[0;0m WARNING 01-02 21:49:28 custom_all_reduce.py:143] Custom allreduce is disabled because your platform lacks GPU P2P capability or P2P test failed. To silence this warning, specify disable_custom_all_reduce=True explicitly.
+[2025-01-02 21:49:28]   9%|▊         | 2798/32768 [00:01<00:09, 3129.33it/s]
+[2025-01-02 21:49:28] WARNING 01-02 21:49:28 custom_all_reduce.py:143] Custom allreduce is disabled because your platform lacks GPU P2P capability or P2P test failed. To silence this warning, specify disable_custom_all_reduce=True explicitly.
+[2025-01-02 21:49:28]   0%|          | 81/32768 [00:00<00:40, 807.16it/s]
+[2025-01-02 21:49:28] INFO 01-02 21:49:28 shm_broadcast.py:255] vLLM message queue communication handle: Handle(connect_ip='127.0.0.1', local_reader_ranks=[1], buffer_handle=(1, 4194304, 6, 'psm_15fb1f56'), local_subscribe_port=43533, remote_subscribe_port=None)
+[2025-01-02 21:49:28]  10%|▉         | 3114/32768 [00:01<00:09, 3136.96it/s]
+[2025-01-02 21:49:28] INFO 01-02 21:49:28 model_runner.py:1092] Starting to load model /home/lukas/projects/LLM_testing/webui/text-generation-webui-main/models/Mistral-Small-Instruct-2409-Q6_K_L.gguf...
+[2025-01-02 21:49:28]   0%|          | 162/32768 [00:00<00:42, 759.29it/s]
+[2025-01-02 21:49:29] [1;36m(VllmWorkerProcess pid=306880)[0;0m INFO 01-02 21:49:28 model_runner.py:1092] Starting to load model /home/lukas/projects/LLM_testing/webui/text-generation-webui-main/models/Mistral-Small-Instruct-2409-Q6_K_L.gguf...
+[2025-01-02 21:49:29]  10%|█         | 3428/32768 [00:01<00:09, 3036.91it/s]
+[2025-01-02 21:49:57] [1;36m(VllmWorkerProcess pid=306880)[0;0m INFO 01-02 21:49:57 model_runner.py:1097] Loading model weights took 8.6263 GB
+[2025-01-02 21:49:57]   1%|          | 239/32768 [00:00<00:44, 739.18it/s]
+[2025-01-02 21:49:57] INFO 01-02 21:49:57 model_runner.py:1097] Loading model weights took 8.6263 GB
+[2025-01-02 21:49:57]  11%|█▏        | 3733/32768 [00:02<00:09, 2943.28it/s]
+[2025-01-02 21:50:30] [1;36m(VllmWorkerProcess pid=306880)[0;0m INFO 01-02 21:50:30 worker.py:241] Memory profiling takes 33.06 seconds
+[2025-01-02 21:50:30]   1%|          | 314/32768 [00:00<00:44, 730.69it/s]
+[2025-01-02 21:50:30] [1;36m(VllmWorkerProcess pid=306880)[0;0m INFO 01-02 21:50:30 worker.py:241] the current vLLM instance can use total_gpu_memory (23.64GiB) x gpu_memory_utilization (0.90) = 21.28GiB
+[2025-01-02 21:50:30]  12%|█▏        | 4029/32768 [00:02<00:09, 2893.69it/s]
+[2025-01-02 21:50:30] [1;36m(VllmWorkerProcess pid=306880)[0;0m INFO 01-02 21:50:30 worker.py:241] model weights take 8.63GiB; non_torch_memory takes 0.40GiB; PyTorch activation peak memory takes 1.63GiB; the rest of the memory reserved for KV Cache is 10.63GiB.
+[2025-01-02 21:50:30]   1%|          | 388/32768 [00:00<00:44, 726.39it/s]
+[2025-01-02 21:50:31] INFO 01-02 21:50:30 worker.py:241] Memory profiling takes 33.07 seconds
+[2025-01-02 21:50:31]  13%|█▎        | 4320/32768 [00:02<00:10, 2805.01it/s]
+[2025-01-02 21:50:31] INFO 01-02 21:50:30 worker.py:241] the current vLLM instance can use total_gpu_memory (23.61GiB) x gpu_memory_utilization (0.90) = 21.25GiB
+[2025-01-02 21:50:31]   1%|▏         | 461/32768 [00:00<00:44, 723.46it/s]
+[2025-01-02 21:50:31] INFO 01-02 21:50:30 worker.py:241] model weights take 8.63GiB; non_torch_memory takes 0.40GiB; PyTorch activation peak memory takes 1.63GiB; the rest of the memory reserved for KV Cache is 10.60GiB.
+[2025-01-02 21:50:31]  14%|█▍        | 4602/32768 [00:02<00:10, 2724.02it/s]
+[2025-01-02 21:50:31] INFO 01-02 21:50:30 distributed_gpu_executor.py:57] # GPU blocks: 6202, # CPU blocks: 2340
+[2025-01-02 21:50:31]   2%|▏         | 534/32768 [00:00<00:44, 721.74it/s]
+[2025-01-02 21:50:31] INFO 01-02 21:50:30 distributed_gpu_executor.py:61] Maximum concurrency for 17000 tokens per request: 5.84x
+[2025-01-02 21:50:31]  15%|█▍        | 4876/32768 [00:02<00:10, 2695.50it/s]
+[2025-01-02 21:50:32] [1;36m(VllmWorkerProcess pid=306880)[0;0m INFO 01-02 21:50:32 model_runner.py:1413] Capturing cudagraphs for decoding. This may lead to unexpected consequences if the model is not static. To run the model in eager mode, set 'enforce_eager=True' or use '--enforce-eager' in the CLI.
+[2025-01-02 21:50:32]   2%|▏         | 607/32768 [00:00<00:44, 720.54it/s]
+[2025-01-02 21:50:33] [1;36m(VllmWorkerProcess pid=306880)[0;0m INFO 01-02 21:50:32 model_runner.py:1417] If out-of-memory error occurs during cudagraph capture, consider decreasing `gpu_memory_utilization` or switching to eager mode. You can also reduce the `max_num_seqs` as needed to decrease memory usage.
+[2025-01-02 21:50:33]  16%|█▌        | 5146/32768 [00:02<00:10, 2606.58it/s]
+[2025-01-02 21:50:33] INFO 01-02 21:50:32 model_runner.py:1413] Capturing cudagraphs for decoding. This may lead to unexpected consequences if the model is not static. To run the model in eager mode, set 'enforce_eager=True' or use '--enforce-eager' in the CLI.
+[2025-01-02 21:50:33]   2%|▏         | 680/32768 [00:00<00:44, 719.53it/s]
+[2025-01-02 21:50:33] INFO 01-02 21:50:32 model_runner.py:1417] If out-of-memory error occurs during cudagraph capture, consider decreasing `gpu_memory_utilization` or switching to eager mode. You can also reduce the `max_num_seqs` as needed to decrease memory usage.
+[2025-01-02 21:50:33]  17%|█▋        | 5408/32768 [00:02<00:10, 2543.16it/s]
+[2025-01-02 21:51:03] [1;36m(VllmWorkerProcess pid=306880)[0;0m INFO 01-02 21:51:03 model_runner.py:1527] Graph capturing finished in 31 secs, took 0.85 GiB
+[2025-01-02 21:51:03]   2%|▏         | 752/32768 [00:01<00:44, 717.78it/s]
+[2025-01-02 21:51:03] INFO 01-02 21:51:03 model_runner.py:1527] Graph capturing finished in 31 secs, took 0.85 GiB
+[2025-01-02 21:51:03]  17%|█▋        | 5663/32768 [00:02<00:10, 2500.37it/s]
+[2025-01-02 21:51:03] INFO 01-02 21:51:03 llm_engine.py:446] init engine (profile, create kv cache, warmup model) took 66.05 seconds
+[2025-01-02 21:51:03]   3%|▎         | 869/32768 [00:01<00:37, 854.23it/s]
+[2025-01-02 21:51:04] INFO 01-02 21:51:03 api_server.py:586] Using supplied chat template:
+[2025-01-02 21:51:04]  18%|█▊        | 5914/32768 [00:02<00:11, 2423.06it/s]
+[2025-01-02 21:51:04] INFO 01-02 21:51:03 api_server.py:586] {% for message in messages %}
+[2025-01-02 21:51:04]   3%|▎         | 1020/32768 [00:01<00:30, 1051.27it/s]
+[2025-01-02 21:51:04] INFO 01-02 21:51:03 api_server.py:586] {% if loop.first and message.role == 'system' %}
+[2025-01-02 21:51:04]  19%|█▉        | 6157/32768 [00:03<00:11, 2377.47it/s]
+[2025-01-02 21:51:04] INFO 01-02 21:51:03 api_server.py:586] <s>[INST] {{ message.content }} [/INST]
+[2025-01-02 21:51:04]   5%|▍         | 1488/32768 [00:01<00:14, 2141.98it/s]
+[2025-01-02 21:51:04] INFO 01-02 21:51:03 api_server.py:586] {% elif message.role == 'user' %}
+[2025-01-02 21:51:04]  20%|█▉        | 6395/32768 [00:03<00:11, 2302.39it/s]
+[2025-01-02 21:51:04] INFO 01-02 21:51:03 api_server.py:586] <s>[INST] {{ message.content }} [/INST]
+[2025-01-02 21:51:04]   6%|▌         | 1911/32768 [00:01<00:11, 2768.42it/s]
+[2025-01-02 21:51:04] INFO 01-02 21:51:03 api_server.py:586] {% elif message.role == 'assistant' %}
+[2025-01-02 21:51:04]  20%|██        | 6626/32768 [00:03<00:11, 2303.88it/s]
+[2025-01-02 21:51:04] INFO 01-02 21:51:03 api_server.py:586] {{ message.content }}</s>
+[2025-01-02 21:51:04]   7%|▋         | 2284/32768 [00:01<00:09, 3056.51it/s]
+[2025-01-02 21:51:04] INFO 01-02 21:51:03 api_server.py:586] {% endif %}
+[2025-01-02 21:51:04]  21%|██        | 6864/32768 [00:03<00:11, 2324.35it/s]
+[2025-01-02 21:51:04] INFO 01-02 21:51:03 api_server.py:586] {% endfor %}
+[2025-01-02 21:51:04]   8%|▊         | 2634/32768 [00:01<00:09, 3189.31it/s]
+[2025-01-02 21:51:05] INFO 01-02 21:51:03 api_server.py:586] 
+[2025-01-02 21:51:05]  22%|██▏       | 7097/32768 [00:03<00:11, 2305.11it/s]
+[2025-01-02 21:51:05] INFO 01-02 21:51:03 launcher.py:19] Available routes are:
+[2025-01-02 21:51:05]   9%|▉         | 2959/32768 [00:01<00:09, 3205.87it/s]
+[2025-01-02 21:51:05] INFO 01-02 21:51:03 launcher.py:27] Route: /openapi.json, Methods: GET, HEAD
+[2025-01-02 21:51:05]  22%|██▏       | 7328/32768 [00:03<00:11, 2265.09it/s]
+[2025-01-02 21:51:05] INFO 01-02 21:51:03 launcher.py:27] Route: /docs, Methods: GET, HEAD
+[2025-01-02 21:51:05]  10%|█         | 3280/32768 [00:01<00:09, 3157.75it/s]
+[2025-01-02 21:51:05] INFO 01-02 21:51:03 launcher.py:27] Route: /docs/oauth2-redirect, Methods: GET, HEAD
+[2025-01-02 21:51:05]  23%|██▎       | 7555/32768 [00:03<00:11, 2230.16it/s]
+[2025-01-02 21:51:05] INFO 01-02 21:51:03 launcher.py:27] Route: /redoc, Methods: GET, HEAD
+[2025-01-02 21:51:05]  11%|█         | 3597/32768 [00:01<00:09, 3102.14it/s]
+[2025-01-02 21:51:05] INFO 01-02 21:51:03 launcher.py:27] Route: /health, Methods: GET
+[2025-01-02 21:51:05]  24%|██▎       | 7779/32768 [00:03<00:11, 2205.97it/s]
+[2025-01-02 21:51:05] INFO 01-02 21:51:03 launcher.py:27] Route: /tokenize, Methods: POST
+[2025-01-02 21:51:05]  12%|█▏        | 3908/32768 [00:02<00:09, 2981.00it/s]
+[2025-01-02 21:51:05] INFO 01-02 21:51:03 launcher.py:27] Route: /detokenize, Methods: POST
+[2025-01-02 21:51:05]  24%|██▍       | 8000/32768 [00:03<00:11, 2177.62it/s]
+[2025-01-02 21:51:05] INFO 01-02 21:51:03 launcher.py:27] Route: /v1/models, Methods: GET
+[2025-01-02 21:51:05]  13%|█▎        | 4208/32768 [00:02<00:09, 2943.01it/s]
+[2025-01-02 21:51:06] INFO 01-02 21:51:03 launcher.py:27] Route: /version, Methods: GET
+[2025-01-02 21:51:06]  25%|██▌       | 8225/32768 [00:03<00:11, 2197.07it/s]
+[2025-01-02 21:51:06] INFO 01-02 21:51:03 launcher.py:27] Route: /v1/chat/completions, Methods: POST
+[2025-01-02 21:51:06]  14%|█▎        | 4504/32768 [00:02<00:09, 2856.67it/s]
+[2025-01-02 21:51:06] INFO 01-02 21:51:03 launcher.py:27] Route: /v1/completions, Methods: POST
+[2025-01-02 21:51:06]  26%|██▌       | 8445/32768 [00:04<00:11, 2169.85it/s]
+[2025-01-02 21:51:06] INFO 01-02 21:51:03 launcher.py:27] Route: /v1/embeddings, Methods: POST
+[2025-01-02 21:51:06]  15%|█▍        | 4791/32768 [00:02<00:09, 2798.93it/s]
+[2025-01-02 21:51:06] INFO 01-02 21:51:03 launcher.py:27] Route: /score, Methods: POST
+[2025-01-02 21:51:06]  26%|██▋       | 8663/32768 [00:04<00:11, 2149.80it/s]
+[2025-01-02 21:51:06] INFO 01-02 21:51:03 launcher.py:27] Route: /v1/score, Methods: POST
+[2025-01-02 21:51:06]  15%|█▌        | 5072/32768 [00:02<00:10, 2721.17it/s]
