@@ -92,12 +92,20 @@ class VLLMClient:
         self.current_model = model_path
             
         # Determine batch size
-        model_max_batch_size = model_config.get('max_batch_size', 1)
+        model_max_batch_size = model_config.get('max_batch_size', 1)  # Default to 1 if not specified
+        if model_max_batch_size is None:
+            model_max_batch_size = 1  # Ensure we have a valid integer
+            
         if batch_size is None:
             effective_batch_size = model_max_batch_size
         else:
             effective_batch_size = min(batch_size, model_max_batch_size)
         
+        # Add a final safety check
+        if effective_batch_size is None or effective_batch_size < 1:
+            effective_batch_size = 1
+
+            
         # Process prompts in batches
         all_completions = []
         for i in range(0, len(prompts), effective_batch_size):

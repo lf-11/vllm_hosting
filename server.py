@@ -143,7 +143,9 @@ class VLLMServer:
             "--port", str(self.port),
             "--max-model-len", str(model_config['max_model_len'])
         ]
-        
+        if model_config['gpu_memory_utilization'] is not None:
+            command.extend(["--gpu-memory-utilization", str(model_config['gpu_memory_utilization'])])
+            
         if model_config['enforce_eager']:
             command.append("--enforce-eager")
         

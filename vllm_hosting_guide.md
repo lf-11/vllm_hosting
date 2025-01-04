@@ -1,5 +1,7 @@
 # Local LLM Hosting Guide
 
+Path to .py files:/home/lukas/projects/LLM_server
+
 ## Setup Requirements
 - PostgreSQL database named 'vllm_hosting'
 - vLLM framework installed
@@ -11,7 +13,7 @@
 
 ## Starting the Server
 ```bash
-python server.py start --model MODEL_NAME
+python3 server.py start --model MODEL_NAME
 ```
 
 Optional parameters:
