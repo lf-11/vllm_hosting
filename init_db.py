@@ -3,7 +3,7 @@ import psycopg2
 def init_db():
     # Database connection parameters
     db_params = {
-        'dbname': 'postgres',
+        'dbname': 'vllm_hosting',
         'user': 'postgres',
         'password': 'postgres',
         'host': 'localhost'
