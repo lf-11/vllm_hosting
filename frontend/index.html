@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Server Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
+    <style>
+        body {
+            padding-top: 20px;
+            background-color: #f8f9fa;
+        }
+        .terminal {
+            background-color: #212529;
+            color: #f8f9fa;
+            font-family: 'Courier New', monospace;
+            padding: 15px;
+            border-radius: 5px;
+            height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .terminal-line {
+            margin: 0;
+            line-height: 1.2;
+        }
+        .card {
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+        .status-running {
+            background-color: #28a745;
+        }
+        .status-stopped {
+            background-color: #dc3545;
+        }
+        .model-config-item {
+            border-left: 3px solid #007bff;
+            padding-left: 10px;
+            margin-bottom: 10px;
+        }
+        #terminal-container {
+            position: relative;
+        }
+        #terminal-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 100;
+        }
+        .btn-terminal {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 3px 8px;
+            margin-left: 5px;
+            border-radius: 3px;
+        }
+        .btn-terminal:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        .gpu-item {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            padding: 8px;
+            margin-bottom: 5px;
+        }
+        
+        .gpu-header {
+            margin-bottom: 5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 3px;
+            font-size: 0.9rem;
+        }
+        
+        .gpu-stat {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2px;
+            font-size: 0.85rem;
+        }
+        
+        .gpu-timestamp {
+            margin-bottom: 8px;
+            text-align: right;
+            font-size: 0.8rem;
+        }
+        
+        .gpu-processes {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            padding: 8px;
+            font-size: 0.85rem;
+        }
+        
+        .gpu-processes table {
+            font-size: 0.8rem;
+        }
+        
+        .gpu-progress {
+            margin-top: 3px !important;
+            margin-bottom: 5px;
+        }
+        
+        .gpu-progress small {
+            font-size: 0.7rem;
+        }
+        
+        .gpu-monitor {
+            background-color: #212529;
+            color: #f8f9fa;
+            font-family: 'Courier New', monospace;
+            padding: 10px;
+            border-radius: 5px;
+            height: 250px;
+            overflow-y: auto;
+        }
+        
+        .gpu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 10px;
+        }
+        
+        .nav-tabs .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .nav-tabs .nav-link.active {
+            background-color: #212529;
+            color: white;
+            border-color: transparent;
+        }
+        
+        .alert {
+            margin-bottom: 8px;
+            padding: 8px 12px;
+        }
+        
+        .alert h5 {
+            margin-bottom: 3px;
+            font-size: 1rem;
+        }
+        
+        .alert hr {
+            margin: 3px 0;
+        }
+        
+        .alert p {
+            margin-bottom: 3px;
+        }
+        
+        .alert-danger {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: #f8d7da;
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+        
+        .alert-danger h5 {
+            color: #ff8d85;
+        }
+        
+        .alert hr {
+            border-top-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .input-group-sm .form-control {
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+        }
+        
+        .input-group-sm .btn {
+            padding: 0.25rem 0.5rem;
+        }
+        
+        .list-group-item.bg-dark {
+            padding: 0.5rem 0.75rem;
+        }
+        
+        .border-secondary {
+            border-color: #495057 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col">
+                <h1 class="display-5">
+                    <i class="bi bi-cpu"></i> LLM Server Manager
+                </h1>
+                <p class="lead">Manage your local LLM server with ease</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Server Control Panel -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-hdd-rack"></i> Server Control
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span>Status:</span>
+                                <span>
+                                    <span id="status-indicator" class="status-indicator status-stopped"></span>
+                                    <span id="status-text">Stopped</span>
+                                </span>
+                            </div>
+                            <div id="server-details" class="small text-muted d-none">
+                                <div class="d-flex justify-content-between">
+                                    <span>Current Model:</span>
+                                    <span id="current-model">-</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Uptime:</span>
+                                    <span id="uptime">-</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <form id="server-form">
+                            <div class="mb-3">
+                                <label for="model-select" class="form-label">Model</label>
+                                <select class="form-select" id="model-select" required>
+                                    <option value="" selected disabled>Select a model</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="max-model-len" class="form-label">Max Model Length</label>
+                                <select class="form-select" id="max-model-len">
+                                    <option value="" selected>Default</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="speculative-decoding">
+                                <label class="form-check-label" for="speculative-decoding">Enable Speculative Decoding</label>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" id="start-btn" class="btn btn-success">
+                                    <i class="bi bi-play-fill"></i> Start Server
+                                </button>
+                                <button type="button" id="stop-btn" class="btn btn-danger" disabled>
+                                    <i class="bi bi-stop-fill"></i> Stop Server
+                                </button>
+                                <button type="button" id="restart-btn" class="btn btn-warning" disabled>
+                                    <i class="bi bi-arrow-repeat"></i> Restart Server
+                                </button>
+                                <button type="button" id="reset-btn" class="btn btn-secondary">
+                                    <i class="bi bi-x-circle"></i> Reset UI
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-info-circle"></i> Model Information
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="model-info">
+                            <p class="text-muted">Select a model to see details</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Terminal Output -->
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        <ul class="nav nav-tabs card-header-tabs" id="outputTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="terminal-tab" data-bs-toggle="tab" data-bs-target="#terminal-content" type="button" role="tab" aria-controls="terminal-content" aria-selected="true">
+                                    <i class="bi bi-terminal"></i> Server Output
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="tmux-tab" data-bs-toggle="tab" data-bs-target="#tmux-content" type="button" role="tab" aria-controls="tmux-content" aria-selected="false">
+                                    <i class="bi bi-window-stack"></i> Tmux Sessions
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="tab-content" id="outputTabsContent">
+                            <!-- Terminal Tab Content -->
+                            <div class="tab-pane fade show active" id="terminal-content" role="tabpanel" aria-labelledby="terminal-tab">
+                                <div id="terminal-container">
+                                    <div id="terminal-actions">
+                                        <button id="clear-terminal" class="btn-terminal" title="Clear Terminal">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                        <button id="copy-terminal" class="btn-terminal" title="Copy to Clipboard">
+                                            <i class="bi bi-clipboard"></i>
+                                        </button>
+                                    </div>
+                                    <div id="terminal" class="terminal"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Tmux Sessions Tab Content -->
+                            <div class="tab-pane fade" id="tmux-content" role="tabpanel" aria-labelledby="tmux-tab">
+                                <div id="tmux-info-container" class="p-3">
+                                    <!-- This will be populated by JavaScript -->
+                                    <div class="text-center py-4">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p class="mt-2">Loading tmux sessions...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- GPU Monitor -->
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">
+                                <i class="bi bi-gpu-card"></i> GPU Monitor
+                            </h5>
+                            <div>
+                                <button id="live-gpu" class="btn btn-sm btn-success me-2" title="Live GPU Updates">
+                                    <i class="bi bi-play-circle"></i> Live Updates
+                                </button>
+                                <button id="refresh-gpu" class="btn btn-sm btn-dark" title="Refresh GPU Stats">
+                                    <i class="bi bi-arrow-clockwise"></i> Refresh
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="gpu-monitor" class="gpu-monitor"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto" id="toast-title">Notification</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toast-message">
+                Message here
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html> 

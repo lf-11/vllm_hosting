@@ -60,7 +60,7 @@ class VLLMClient:
             response = requests.post(
                 f"{self.server_url}/v1/{endpoint}",
                 json=payload,
-                timeout=60
+                timeout=300
             )
             response.raise_for_status()
             return response.json()

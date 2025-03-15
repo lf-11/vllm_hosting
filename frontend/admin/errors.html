@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Management - LLM Server Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <style>
+        body {
+            padding-top: 20px;
+            background-color: #f8f9fa;
+        }
+        .card {
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col">
+                <h1>Error Management</h1>
+                <p class="text-muted">View and manage known errors for the LLM Server Manager</p>
+                <a href="../" class="btn btn-outline-primary">
+                    <i class="bi bi-arrow-left"></i> Back to Server Manager
+                </a>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Known Errors</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="errors-container">
+                            <div class="text-center">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p>Loading errors...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">Add New Error</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="add-error-form">
+                            <div class="mb-3">
+                                <label for="error-pattern" class="form-label">Error Pattern (regex)</label>
+                                <input type="text" class="form-control" id="error-pattern" required>
+                                <div class="form-text">Use a regular expression to match error messages</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="error-message" class="form-label">Error Message</label>
+                                <input type="text" class="form-control" id="error-message" required>
+                                <div class="form-text">A human-readable description of the error</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="error-solution" class="form-label">Solution</label>
+                                <textarea class="form-control" id="error-solution" rows="3" required></textarea>
+                                <div class="form-text">Provide a solution or workaround for this error</div>
+                            </div>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-plus-circle"></i> Add Error
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Error Item Template -->
+    <template id="error-template">
+        <div class="card mb-3 error-item">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0 error-message"></h6>
+                <span class="badge bg-info error-count"></span>
+            </div>
+            <div class="card-body">
+                <div class="mb-2">
+                    <strong>Pattern:</strong> <code class="error-pattern"></code>
+                </div>
+                <div class="mb-2">
+                    <strong>Solution:</strong> <p class="error-solution"></p>
+                </div>
+                <div class="small text-muted">
+                    First seen: <span class="error-first-seen"></span> | 
+                    Last seen: <span class="error-last-seen"></span>
+                </div>
+            </div>
+        </div>
+    </template>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const API_BASE_URL = window.location.protocol + '//' + window.location.host;
+            const errorsContainer = document.getElementById('errors-container');
+            const errorTemplate = document.getElementById('error-template');
+            const addErrorForm = document.getElementById('add-error-form');
+            
+            // Load errors
+            fetchErrors();
+            
+            // Add error form submission
+            addErrorForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const errorData = {
+                    pattern: document.getElementById('error-pattern').value,
+                    message: document.getElementById('error-message').value,
+                    solution: document.getElementById('error-solution').value
+                };
+                
+                fetch(`${API_BASE_URL}/api/errors`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(errorData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert('Error added successfully!');
+                    addErrorForm.reset();
+                    fetchErrors(); // Refresh the list
+                })
+                .catch(error => {
+                    console.error('Error adding new error:', error);
+                    alert('Failed to add error. See console for details.');
+                });
+            });
+            
+            function fetchErrors() {
+                fetch(`${API_BASE_URL}/api/errors`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    displayErrors(data.errors);
+                })
+                .catch(error => {
+                    console.error('Error fetching errors:', error);
+                    errorsContainer.innerHTML = `
+                        <div class="alert alert-danger">
+                            Failed to load errors. See console for details.
+                        </div>
+                    `;
+                });
+            }
+            
+            function displayErrors(errors) {
+                errorsContainer.innerHTML = '';
+                
+                if (errors.length === 0) {
+                    errorsContainer.innerHTML = `
+                        <div class="alert alert-info">
+                            No errors have been recorded yet.
+                        </div>
+                    `;
+                    return;
+                }
+                
+                errors.forEach(error => {
+                    const errorElement = errorTemplate.content.cloneNode(true);
+                    
+                    errorElement.querySelector('.error-message').textContent = error.error_message;
+                    errorElement.querySelector('.error-pattern').textContent = error.error_pattern;
+                    errorElement.querySelector('.error-solution').textContent = error.solution;
+                    errorElement.querySelector('.error-count').textContent = `Occurrences: ${error.occurrence_count}`;
+                    
+                    const firstSeen = new Date(error.first_seen).toLocaleString();
+                    const lastSeen = new Date(error.last_seen).toLocaleString();
+                    
+                    errorElement.querySelector('.error-first-seen').textContent = firstSeen;
+                    errorElement.querySelector('.error-last-seen').textContent = lastSeen;
+                    
+                    errorsContainer.appendChild(errorElement);
+                });
+            }
+        });
+    </script>
+</body>
+</html> 

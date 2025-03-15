@@ -1,37 +1,31 @@
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+from config import DB_CONFIG
 
 def init_db():
-    """Initialize the vLLM hosting database with all required tables and functions"""
+    """Initialize the LM hosting database with all required tables and functions"""
     
     # First connect to default postgres database to create our database if it doesn't exist
     conn = psycopg2.connect(
         dbname='postgres',
-        user='postgres',
-        password='postgres',
-        host='localhost'
+        user=DB_CONFIG['user'],
+        password=DB_CONFIG['password'],
+        host=DB_CONFIG['host']
     )
     conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
     cur = conn.cursor()
     
     # Create database if it doesn't exist
-    cur.execute("SELECT 1 FROM pg_database WHERE datname = 'vllm_hosting'")
+    cur.execute(f"SELECT 1 FROM pg_database WHERE datname = '{DB_CONFIG['dbname']}'")
     if not cur.fetchone():
-        cur.execute("CREATE DATABASE vllm_hosting")
+        cur.execute(f"CREATE DATABASE {DB_CONFIG['dbname']}")
     
     # Close connection to postgres database
     cur.close()
     conn.close()
     
     # Connect to our database
-    db_params = {
-        'dbname': 'vllm_hosting',
-        'user': 'postgres',
-        'password': 'postgres',
-        'host': 'localhost'
-    }
-    
-    conn = psycopg2.connect(**db_params)
+    conn = psycopg2.connect(**DB_CONFIG)
     conn.autocommit = True
     cur = conn.cursor()
     

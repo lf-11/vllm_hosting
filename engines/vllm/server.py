@@ -300,7 +300,7 @@ class VLLMServer:
 def get_db_config():
     """Get fixed database configuration"""
     return {
-        'dbname': 'vllm_hosting',
+        'dbname': 'lm_hosting',
         'user': 'postgres',
         'password': 'postgres',
         'host': 'localhost'
@@ -318,6 +318,18 @@ def main():
                       help='Maximum sequence length for the model')
     parser.add_argument('--speculative-decoding', action='store_true',
                       help='Enable speculative decoding')
+    parser.add_argument('--tensor-parallel-size', type=int, 
+                      help='Tensor parallel size for model loading')
+    parser.add_argument('--gpu-memory-utilization', type=float,
+                      help='GPU memory utilization (0.0 to 1.0)')
+    parser.add_argument('--enforce-eager', action='store_true',
+                      help='Enforce eager execution')
+    parser.add_argument('--chat-template', type=str,
+                      help='Chat template to use')
+    parser.add_argument('--max-batch-size', type=int,
+                      help='Maximum batch size for inference')
+    parser.add_argument('--use-tmux', action='store_true',
+                      help='Run the server in a tmux session')
     
     args = parser.parse_args()
     
@@ -330,18 +342,91 @@ def main():
         custom_params['max_model_len'] = args.max_model_len
     if args.speculative_decoding:
         custom_params['speculative_decoding'] = True
+    if args.tensor_parallel_size:
+        custom_params['tensor_parallel_size'] = args.tensor_parallel_size
+    if args.gpu_memory_utilization:
+        custom_params['gpu_memory_utilization'] = args.gpu_memory_utilization
+    if args.enforce_eager:
+        custom_params['enforce_eager'] = True
+    if args.chat_template:
+        custom_params['chat_template'] = args.chat_template
+    if args.max_batch_size:
+        custom_params['max_batch_size'] = args.max_batch_size
     
     try:
         if args.action == 'start':
             if not args.model:
                 parser.error("--model is required for start action")
-            server.start(args.model, **custom_params)
-            # Keep script running until interrupted
-            while True:
-                time.sleep(1)
+                
+            if args.use_tmux:
+                # Start in tmux session
+                import subprocess
+                
+                # Create a unique tmux session name based on the model
+                tmux_session = f"vllm_server_{args.model.replace('/', '_')}"
+                
+                # Check if session already exists
+                check_cmd = ["tmux", "has-session", "-t", tmux_session]
+                if subprocess.run(check_cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0:
+                    print(f"Session {tmux_session} already exists. Killing it...")
+                    subprocess.run(["tmux", "kill-session", "-t", tmux_session])
+                
+                # Construct the command to run inside tmux
+                cmd_parts = [sys.executable, __file__, "start", "--model", args.model]
+                
+                # Add all the other arguments except --use-tmux
+                if args.max_model_len:
+                    cmd_parts.extend(["--max-model-len", str(args.max_model_len)])
+                if args.speculative_decoding:
+                    cmd_parts.append("--speculative-decoding")
+                if args.tensor_parallel_size:
+                    cmd_parts.extend(["--tensor-parallel-size", str(args.tensor_parallel_size)])
+                if args.gpu_memory_utilization:
+                    cmd_parts.extend(["--gpu-memory-utilization", str(args.gpu_memory_utilization)])
+                if args.enforce_eager:
+                    cmd_parts.append("--enforce-eager")
+                if args.chat_template:
+                    cmd_parts.extend(["--chat-template", args.chat_template])
+                if args.max_batch_size:
+                    cmd_parts.extend(["--max-batch-size", str(args.max_batch_size)])
+                
+                # Convert command parts to a single string
+                cmd_str = " ".join(cmd_parts)
+                
+                # Start the tmux session
+                tmux_cmd = ["tmux", "new-session", "-d", "-s", tmux_session, cmd_str]
+                subprocess.run(tmux_cmd)
+                
+                print(f"vLLM server started in tmux session: {tmux_session}")
+                print(f"To attach to this session, run: tmux attach -t {tmux_session}")
+                
+                # Write the tmux session name to a file for reference
+                with open("vllm_tmux_session.txt", "w") as f:
+                    f.write(tmux_session)
+                
+                # Exit this process as the real server is now running in tmux
+                return
+            else:
+                # Start normally
+                server.start(args.model, **custom_params)
+                # Keep script running until interrupted
+                while True:
+                    time.sleep(1)
                 
         elif args.action == 'stop':
             server.shutdown()
+            
+            # Also try to kill any tmux session
+            try:
+                with open("vllm_tmux_session.txt", "r") as f:
+                    tmux_session = f.read().strip()
+                    
+                import subprocess
+                subprocess.run(["tmux", "kill-session", "-t", tmux_session], 
+                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                print(f"Killed tmux session: {tmux_session}")
+            except FileNotFoundError:
+                pass
             
         elif args.action == 'restart':
             if not args.model:
@@ -354,6 +439,18 @@ def main():
                 
         elif args.action == 'force-kill':
             server._cleanup_existing()
+            
+            # Also try to kill any tmux session
+            try:
+                with open("vllm_tmux_session.txt", "r") as f:
+                    tmux_session = f.read().strip()
+                    
+                import subprocess
+                subprocess.run(["tmux", "kill-session", "-t", tmux_session], 
+                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                print(f"Force-killed tmux session: {tmux_session}")
+            except FileNotFoundError:
+                pass
             
     except KeyboardInterrupt:
         print("\nReceived interrupt, shutting down...")
